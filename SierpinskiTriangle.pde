@@ -6,9 +6,17 @@ public void setup()
 int timesToDraw = 20;
 int sizeToDraw = 200;
 int[] colorValues = {(int)(Math.random()*255), (int)(Math.random()*255), (int)(Math.random()*255)};
-int[] colorSpeeds = {(int)(Math.random()*20)-10, (int)(Math.random()*20)-10, (int)(Math.random()*20)-10};
+//int[] colorSpeeds = {(int)(Math.random()*2)-1, (int)(Math.random()*4)-2, (int)(Math.random()*4)-2};
+int[] colorSpeeds = {1, 1, 1};
 
 public void draw()
+{
+  updateColorValues();
+  //frameColorValues = colorValues;
+  sierpinski((width/2)-(sizeToDraw/2), (height/2)+(sizeToDraw/2), sizeToDraw, true);
+}
+
+public void updateColorValues()
 {
   for (int i=0; i < colorValues.length; i++)
   {
@@ -19,18 +27,26 @@ public void draw()
       colorValues[i] = colorValues[i] > 255 ? 255 : colorValues[i] < 0 ? 0 : 0;
     }
   }
-  sierpinski((width/2)-(sizeToDraw/2), (height/2)+(sizeToDraw/2), sizeToDraw);
 }
 
-public void sierpinski(float x, float y, float len)
+int[] frameColorValues = new int[3];
+public void sierpinski(float x, float y, float len, boolean shouldUpdateColor)
 {
-  if (len >= 1)
+  //if (shouldUpdateColor)
+    //updateColorValues();
+  if (len >= 2)
   {
     //fill((int)(len/(mouseX*1.0/50.0)), (int)(len/(mouseY*1.0/50.0)), (int)(1.0*len/(1.0*(width-mouseX))));
-    fill(colorValues[0], colorValues[1], colorValues[2]);
+    //stroke(255-colorValues[0], 255-colorValues[1], 255-colorValues[2], len);
+    fill(colorValues[0], colorValues[1], colorValues[2], len);
     triangle(x, y, x+len/2, y-len, x+len, y);
-    sierpinski(x,y,len/2);
-    sierpinski(x+(len/2),y,len/2);
-    sierpinski(x+(len/4),y-(len/2),len/2);
+    sierpinski(x,y,len/2,true);
+    sierpinski(x+(len/2),y,len/2,false);
+    sierpinski(x+(len/4),y-(len/2),len/2,false);
   }
+  /*else if (shouldUpdateColor)
+  {
+    colorValues = frameColorValues;
+    updateColorValues();
+  }*/
 }
